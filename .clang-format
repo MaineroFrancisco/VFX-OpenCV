@@ -1,0 +1,6 @@
+---
+ColumnLimit: '96'
+IndentWidth: '4'
+IndentWrappedFunctionNames: 'true'
+TabWidth: '4'
+UseTab: ForContinuationAndIndentation
