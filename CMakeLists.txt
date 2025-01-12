@@ -1,6 +1,8 @@
 # CMakeList.txt : Top-level CMake project file
 cmake_minimum_required (VERSION 3.28)
 
+find_package(imgui REQUIRED)
+
 # clangd (much better than intellisense) needs the compile_commands.json in the root folder or build folder.
 # For IDE setup, see https://clangd.llvm.org/installation#project-setup
 # If not explicitly set, we enable it:
@@ -35,3 +37,5 @@ set(SOURCES main.cpp)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC imgui::imgui)
