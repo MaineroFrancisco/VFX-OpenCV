@@ -39,4 +39,5 @@ set(SOURCES main.cpp)
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC imgui::imgui)
+# TODO: Not use all opencv libs, only necessary
+target_link_libraries(${PROJECT_NAME} PUBLIC imgui::imgui ${OpenCV_LIBS})
