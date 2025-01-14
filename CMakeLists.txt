@@ -2,6 +2,7 @@
 cmake_minimum_required (VERSION 3.28)
 
 find_package(imgui REQUIRED)
+find_package(OpenCV REQUIRED)
 
 # clangd (much better than intellisense) needs the compile_commands.json in the root folder or build folder.
 # For IDE setup, see https://clangd.llvm.org/installation#project-setup
