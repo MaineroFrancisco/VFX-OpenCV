@@ -1,70 +1,26 @@
-#include <iostream>
-#include <opencv2/opencv.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include <GL/glew.h> // TODO: necessary? remove
-#include <GLFW/glfw3.h>
+#include <iostream>
+
+using namespace cv;
 
 int main() {
-	cv::Mat image = cv::imread("../lena.jpg", cv::IMREAD_COLOR);
-	if (image.empty()) {
-		return -1;
-	}
-	cv::cvtColor(image, image, cv::COLOR_BGR2RGBA);
+	std::string image_path = std::string(ASSETS_FOLDER) + "input/Lena.jpg";
+	Mat img = imread(image_path, IMREAD_COLOR);
 
-	if (!glfwInit()) {
-		return -1;
+	if (img.empty()) {
+		std::cout << "Could not read the image: " << image_path << std::endl;
+		return 1;
 	}
 
-	GLFWwindow *window = glfwCreateWindow(800, 600, "glfw window", nullptr, nullptr);
-	glfwSetWindowCloseCallback(
-		window, [](GLFWwindow *window) { glfwSetWindowShouldClose(window, GL_FALSE); });
-	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1);
-	glewInit();
+	imshow("Display window", img);
+	int k = waitKey(0); // Wait for a keystroke in the window
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 330");
-
-	bool is_show = true;
-	while (is_show) {
-		glfwPollEvents();
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		ImGui::Begin("imgui image", &is_show);
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.cols, image.rows, 0, GL_RGBA,
-					 GL_UNSIGNED_BYTE, image.data);
-		// TODO: Fix
-		// ImGui::Image( reinterpret_cast<void*>( static_cast<intptr_t>( texture ) ), ImVec2(
-		// image.cols, image.rows ) );
-		ImGui::End();
-
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		glfwSwapBuffers(window);
+	if (k == 's') {
+		imwrite(std::string(ASSETS_FOLDER) + "output/Lena.png", img);
 	}
-
-	ImGui_ImplGlfw_Shutdown();
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui::DestroyContext();
-	glfwTerminate();
 
 	return 0;
 }
